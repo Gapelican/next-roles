@@ -4,28 +4,24 @@ import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setAuth, setLoading, isLoading } = useAuthStore();
+  const { setAuth, setLoading } = useAuthStore();
 
   useEffect(() => {
-    async function loadAuthData() {
+    // Verificar se há um token armazenado
+    const token = localStorage.getItem('auth_token');
+    const storedPermissions = localStorage.getItem('auth_permissions');
+
+    if (token && storedPermissions) {
       try {
-        const response = await fetch('/api/auth/login');
-        const data = await response.json();
-        setAuth(data.token, data.permission);
+        const permissions = JSON.parse(storedPermissions);
+        setAuth(token, permissions);
       } catch (error) {
-        console.error('Failed to load auth data', error);
-        setLoading(false);
+        console.error('Failed to parse stored permissions', error);
       }
     }
 
-    if (isLoading) {
-      loadAuthData();
-    }
-  }, [setAuth, setLoading, isLoading]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+    setLoading(false);
+  }, [setAuth, setLoading]);
 
   return <>{children}</>;
 }

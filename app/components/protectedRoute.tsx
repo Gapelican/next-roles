@@ -21,7 +21,7 @@ export function ProtectedRoute({
   }
 
   if (!hasPermission(requiredPermission, role)) {
-    redirect('/unauthorized');
+    redirect('/login');
   }
 
   return <>{children}</>;

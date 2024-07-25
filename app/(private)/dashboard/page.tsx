@@ -1,8 +1,9 @@
 // app/dashboard/page.tsx
 'use client';
 
-import { useAuthStore } from '../store/authStore';
-import { usePermission } from '../hooks/usePermission';
+import { usePermission } from "@/app/hooks/usePermission";
+import { useAuthStore } from "@/app/store/authStore";
+
 
 export default function DashboardPage() {
   const { token, permissions } = useAuthStore();
